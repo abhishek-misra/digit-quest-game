@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Digit Quest Game</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
+  <link href="./assets/bg-style.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="main">
+    <div class="bg-container">
+      <div id="stars"></div>
+      <div id="stars2"></div>
+      <div id="stars3"></div>
+      <div class="title">
+        <span>
+          DIGIT QUEST
+        </span>
+      </div>
+      <div class="sub-title">
+        <span>
+          Conquer the challenge, master the art. Are you ready?
+        </span>
+      </div>
+    </div>
+
+    <div class="card-container">
+      <div class="card">
+        <div id="counter" class="counter"></div>
+      </div>
+      <div class="button-container">
+        <button id="btnStart" class="btn-start" onclick="start()">
+          <span class="back"></span>
+          <span class="front"></span>
+          ss
+        </button>
+        <button id="btnStop" class="btn-stop" onclick="stop()" style="display: none;">
+          <span class="back"></span>
+          <span class="front"></span>
+          ssss
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    var isStopInfinite = false;
+    var audioArray = [
+      './assets/Song1.mp3',
+      './assets/Song2.mp3',
+      './assets/Song3.mp3',
+      './assets/Song4.mp3',
+      './assets/Song5.mp3',
+      './assets/Song6.mp3',
+      './assets/Song7.mp3',
+    ];
+
+    var audio = new Audio();
+
+    function stop() {
+      var startButton = document.getElementById('btnStart');
+      startButton.style.display = 'block';
+
+      var stopButton = document.getElementById('btnStop');
+      stopButton.style.display = 'none';
+
+      stopAudio();
+      const randomNumber = getRandomNumber();
+      isStopInfinite = true;
+      setRandomNumber(randomNumber);
+    }
+
+
+    function start() {
+
+      var startButton = document.getElementById('btnStart');
+      startButton.style.display = 'none';
+
+      var stopButton = document.getElementById('btnStop');
+      stopButton.style.display = 'block';
+
+      setRandomNumber("");
+      playRandomAudio();
+
+      isStopInfinite = false;
+      animateAndShowNumberInfinite();
+    }
+
+    function playRandomAudio() {
+      var randomIndex = Math.floor(Math.random() * audioArray.length);
+      var audioPath = audioArray[randomIndex];
+      audio.currentTime = 20;
+      audio.src = audioPath;
+      audio.loop = true; // Loop the audio
+      audio.play();
+    }
+
+    function stopAudio() {
+      audio.pause();
+      audio.currentTime = 0; // Reset audio to beginning
+    }
+
+    function getRandomNumber() {
+      var minDigits = 7;
+      var maxDigits = 9;
+
+      var randomNumber = '';
+
+      // Array to keep track of used digits
+      var usedDigits = [];
+
+      // Generate random number with unique digits
+      var numberOfDigits = Math.floor(Math.random() * (maxDigits - minDigits + 1)) + minDigits;
+
+      for (var i = 0; i < numberOfDigits; i++) {
+        var digit = getRandomDigit(usedDigits);
+        randomNumber += digit;
+        usedDigits.push(digit);
+      }
+
+     return randomNumber;   
+    }
+
+    function setRandomNumber(innerText) {
+      document.getElementById('counter').innerText = innerText;
+    }
+
+    function getRandomDigit(usedDigits) {
+      var digit = Math.floor(Math.random() * 10);
+
+      // Check if digit is already used
+      while (usedDigits.includes(digit)) {
+        digit = Math.floor(Math.random() * 10);
+      }
+
+      return digit;
+    }
+
+    function animateAndShowNumberInfinite() {
+      const counter = document.getElementById('counter');
+
+      const animate = () => {
+        if(!isStopInfinite) {
+          counter.innerText = Math.floor(Math.random() * (999999999 - 1111111 + 1)) + 1111111;
+          setTimeout(animate, 80);
+        }
+      }
+
+      animate();
+    }
+
+  </script>
+</body>
+
+</html>
