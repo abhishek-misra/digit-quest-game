@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #audioControls {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Audio Player</h1>
+
+    <div id="audioControls">
+        <button id="playButton">Play</button>
+        <button id="pauseButton">Pause</button>
+    </div>
+
+    <select id="songList"></select>
+    <br>
+    Skip Time: <input type="text" id="skipSeconds" readonly>
+
+    <script>
+        // Sample JSON data for song list with skip time
+        var songs = [
+            { name: "Song 1", src: './assets/audio/Song1.mp3', skipSeconds: '44' },
+            { name: "Song 2", src: './assets/audio/Song2.mp3', skipSeconds: '22' },
+            { name: "Song 3", src: './assets/audio/Song3.mp3', skipSeconds: '16' },
+            { name: "Song 4", src: './assets/audio/Song4.mp3', skipSeconds: '1' },
+            { name: "Song 5", src: './assets/audio/Song5.mp3', skipSeconds: '12' },
+            { name: "Song 6", src: './assets/audio/Song6.mp3', skipSeconds: '52' },
+            { name: "Song 7", src: './assets/audio/Song7.mp3', skipSeconds: '16' },
+            { name: "Song 8", src: './assets/audio/song8.mpeg', skipSeconds: '7' },
+            { name: "Song 9", src: './assets/audio/Song9.mpeg', skipSeconds: '6' },
+            { name: "Song 10", src: './assets/audio/Song10.mpeg', skipSeconds: '28' },
+            { name: "Song 11", src: './assets/audio/Song11.mpeg', skipSeconds: '48' },
+            { name: "Song 12", src: './assets/audio/Song12.mpeg', skipSeconds: '13' },
+            { name: "Song 14", src: './assets/audio/Song14.mpeg', skipSeconds: '65' }
+        ];
+
+        // Populate song list dropdown
+        var songList = document.getElementById('songList');
+        songs.forEach(function (song) {
+            var option = document.createElement('option');
+            option.textContent = song.name;
+            songList.appendChild(option);
+        });
+
+        var audio = new Audio();
+        var playButton = document.getElementById('playButton');
+        var pauseButton = document.getElementById('pauseButton');
+        var skipTime = document.getElementById('skipSeconds');
+
+        playButton.addEventListener('click', function () {
+            audio.play();
+        });
+
+        pauseButton.addEventListener('click', function () {
+            audio.pause();
+        });
+
+        songList.addEventListener('change', function () {
+            var selectedSong = songs[songList.selectedIndex];
+            audio.src = selectedSong.src;
+            //audio.play();
+            skipTime.value = selectedSong.skipSeconds;
+            audio.currentTime = parseInt(selectedSong.skipSeconds);
+        });
+
+        audio.addEventListener('timeupdate', function () {
+            skipTime.value = Math.floor(audio.currentTime);
+        });
+    </script>
+</body>
+
+</html>

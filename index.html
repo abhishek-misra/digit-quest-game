@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 
 <head>
@@ -46,14 +45,21 @@
   </div>
   <script>
     var isStopInfinite = false;
+    var audioIndex = 0;
     var audioArray = [
-      './assets/Song1.mp3',
-      './assets/Song2.mp3',
-      './assets/Song3.mp3',
-      './assets/Song4.mp3',
-      './assets/Song5.mp3',
-      './assets/Song6.mp3',
-      './assets/Song7.mp3',
+      { name: "Song 1", src: './assets/audio/Song1.mp3', skipSeconds: '44' },
+      { name: "Song 2", src: './assets/audio/Song2.mp3', skipSeconds: '22' },
+      { name: "Song 3", src: './assets/audio/Song3.mp3', skipSeconds: '16' },
+      { name: "Song 4", src: './assets/audio/Song4.mp3', skipSeconds: '1' },
+      { name: "Song 5", src: './assets/audio/Song5.mp3', skipSeconds: '12' },
+      { name: "Song 6", src: './assets/audio/Song6.mp3', skipSeconds: '52' },
+      { name: "Song 7", src: './assets/audio/Song7.mp3', skipSeconds: '16' },
+      { name: "Song 8", src: './assets/audio/song8.mpeg', skipSeconds: '7' },
+      { name: "Song 9", src: './assets/audio/Song9.mpeg', skipSeconds: '6' },
+      { name: "Song 10", src: './assets/audio/Song10.mpeg', skipSeconds: '28' },
+      { name: "Song 11", src: './assets/audio/Song11.mpeg', skipSeconds: '48' },
+      { name: "Song 12", src: './assets/audio/Song12.mpeg', skipSeconds: '13' },
+      { name: "Song 14", src: './assets/audio/Song14.mpeg', skipSeconds: '65' }
     ];
 
     var audio = new Audio();
@@ -88,17 +94,22 @@
     }
 
     function playRandomAudio() {
-      var randomIndex = Math.floor(Math.random() * audioArray.length);
-      var audioPath = audioArray[randomIndex];
-      audio.currentTime = 20;
+      var audioPath = audioArray[audioIndex].src;
+      audio = new Audio();
+      audio.currentTime = parseInt(audioArray[audioIndex].skipSeconds);
       audio.src = audioPath;
-      audio.loop = true; // Loop the audio
       audio.play();
     }
 
     function stopAudio() {
       audio.pause();
-      audio.currentTime = 0; // Reset audio to beginning
+      audio = null;
+
+      if(audioIndex + 1 > audioArray.length - 1){
+        audioIndex = 0;
+      } else {
+        audioIndex = audioIndex + 1;
+      }
     }
 
     function getRandomNumber() {
@@ -119,7 +130,7 @@
         usedDigits.push(digit);
       }
 
-     return randomNumber;   
+      return randomNumber;
     }
 
     function setRandomNumber(innerText) {
@@ -141,7 +152,7 @@
       const counter = document.getElementById('counter');
 
       const animate = () => {
-        if(!isStopInfinite) {
+        if (!isStopInfinite) {
           counter.innerText = Math.floor(Math.random() * (999999999 - 1111111 + 1)) + 1111111;
           setTimeout(animate, 80);
         }
